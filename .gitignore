@@ -1,0 +1,41 @@
+# Data (large files — get from Kaggle)
+train.csv
+test.csv
+data/*.csv
+
+# Generated submission outputs (optional: remove line to commit Final_predictions.csv)
+hybrid_submission.csv
+efficient_submission.csv
+submission.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.pickle
+*.pkl

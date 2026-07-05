@@ -1,0 +1,122 @@
+{
+  "validation_rows": 50000,
+  "hybrid": {
+    "rmse": 0.8104878312866817,
+    "mae": 0.5286774838327887,
+    "r2": 0.42913588117172463
+  },
+  "baselines": {
+    "global_mean": {
+      "rmse": 1.0727210179141342,
+      "mae": 0.8505830938241811,
+      "r2": -3.069160179092201e-05
+    },
+    "user_mean": {
+      "rmse": 0.9805736073284916,
+      "mae": 0.7404372199783984,
+      "r2": 0.16439669541135216
+    },
+    "item_mean": {
+      "rmse": 1.0541883112628112,
+      "mae": 0.780570505258117,
+      "r2": 0.03422459274762546
+    }
+  },
+  "tier_mix_counts": {
+    "ENHANCED_SVD": 38602,
+    "HYBRID_STATISTICS": 4577,
+    "CONTENT_SIMILARITY": 6821
+  },
+  "tier_mix_pct": {
+    "ENHANCED_SVD": 77.2,
+    "HYBRID_STATISTICS": 9.15,
+    "CONTENT_SIMILARITY": 13.64
+  },
+  "per_tier_rmse": {
+    "ENHANCED_SVD": {
+      "n": 38602,
+      "rmse": 0.7535594231656656,
+      "mae": 0.4634680123002603,
+      "r2": 0.5227276908380012
+    },
+    "HYBRID_STATISTICS": {
+      "n": 4577,
+      "rmse": 0.9464965369158508,
+      "mae": 0.7252644864374252,
+      "r2": 0.12819790992436786
+    },
+    "CONTENT_SIMILARITY": {
+      "n": 6821,
+      "rmse": 1.0002183732104217,
+      "mae": 0.7658036103798108,
+      "r2": -0.052416976818100425
+    }
+  },
+  "coverage_pct": 100.0,
+  "calibration": [
+    {
+      "bucket": "[1,2)",
+      "n": 857,
+      "mean_pred": 1.331,
+      "mean_actual": 1.398
+    },
+    {
+      "bucket": "[2,3)",
+      "n": 2061,
+      "mean_pred": 2.507,
+      "mean_actual": 2.51
+    },
+    {
+      "bucket": "[3,4)",
+      "n": 9654,
+      "mean_pred": 3.618,
+      "mean_actual": 3.643
+    },
+    {
+      "bucket": "[4,4.5)",
+      "n": 18911,
+      "mean_pred": 4.256,
+      "mean_actual": 4.293
+    },
+    {
+      "bucket": "[4.5,5.01)",
+      "n": 18517,
+      "mean_pred": 4.826,
+      "mean_actual": 4.803
+    }
+  ],
+  "prediction_distribution": {
+    "mean": 4.222,
+    "std": 0.718,
+    "min": 1.0,
+    "max": 5.0,
+    "pct_below_3": 5.84,
+    "pct_above_4_5": 37.03
+  },
+  "split": "by-interaction",
+  "val_cold_users_pct": 0.0,
+  "val_cold_items_pct": 15.71,
+  "trained_at_unix": 1783247958,
+  "dataset": {
+    "total_ratings": 745889,
+    "users": 2000,
+    "products": 201325
+  },
+  "hyperparams": {
+    "similarity_threshold_case2": 0.2,
+    "similarity_threshold_case3": 0.3,
+    "max_tfidf_features": 1500,
+    "n_svd_factors": 85,
+    "svd_reg": 0.01,
+    "svd_lr": 0.01,
+    "svd_epochs": 40,
+    "min_product_ratings": 2,
+    "confidence_divisor": 5,
+    "user_product_weights": [
+      0.65,
+      0.35
+    ],
+    "use_quality_adjustment": true,
+    "quality_confidence_threshold": 0.7
+  }
+}

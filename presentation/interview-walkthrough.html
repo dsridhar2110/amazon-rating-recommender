@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StarSense — How I'd Talk Through It</title>
+<style>
+  :root{
+    --ground:#0f172a; --ink:#0f172a; --muted:#64748b;
+    --line:#e2e8f0; --bg:#f8fafc; --card:#ffffff;
+    --teal:#0d9488; --teal-dark:#0f766e; --teal-soft:#f0fdfa;
+    --amber:#d97706; --amber-soft:#fffbeb; --rose:#e11d48;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px}
+  .tnum{font-variant-numeric:tabular-nums}
+  code{background:#eef2f6;padding:1px 6px;border-radius:5px;font-size:.9em}
+
+  header.hero{background:linear-gradient(135deg,#0f172a 0%,#134e4a 100%);color:#fff;padding:52px 0 46px}
+  .brandrow{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .logo{height:38px;width:38px;border-radius:9px;background:var(--teal);color:#062925;font-weight:800;
+    display:grid;place-items:center;font-size:20px}
+  .brandrow b{font-size:16px;font-weight:600}
+  .brandrow span{color:#94a3b8;font-size:12px;display:block;margin-top:-3px}
+  .kicker{color:#5eead4;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+  header.hero h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:10px 0 14px;max-width:22ch}
+  header.hero p.lede{color:#cbd5e1;font-size:17px;max-width:60ch}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font-weight:600;
+    font-size:14px;text-decoration:none;transition:.15s}
+  .btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#14b8a6}
+  .btn-ghost{background:rgba(255,255,255,.08);color:#e2e8f0;border:1px solid rgba(255,255,255,.18)}
+  .btn-ghost:hover{background:rgba(255,255,255,.15)}
+
+  main{padding:42px 0 60px}
+  section{margin-bottom:44px}
+  h2{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:6px}
+  h2 + .h2sub{font-size:23px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+  .lead-note{color:var(--muted);font-size:15px;margin-bottom:20px;max-width:66ch}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px}
+  .purpose p{font-size:15.5px;color:#1e293b}.purpose p + p{margin-top:12px}
+  .purpose b{color:var(--ink)}
+
+  /* plain story steps */
+  .story{counter-reset:s}
+  .srow{display:flex;gap:16px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line)}
+  .srow:last-child{border-bottom:none}
+  .snum{height:30px;width:30px;border-radius:8px;background:var(--teal-soft);color:var(--teal-dark);
+    font-weight:800;display:grid;place-items:center;font-size:14px;flex-shrink:0}
+  .srow p{font-size:15.5px;color:#1e293b}.srow p b{color:var(--ink)}
+  .srow .term{color:var(--teal-dark);font-weight:600}
+
+  /* data snapshot table */
+  .snap{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+  .snap th{text-align:left;color:var(--muted);font-weight:600;padding:6px 10px;border-bottom:2px solid var(--line);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .snap td{padding:7px 10px;border-bottom:1px solid var(--line);color:#1e293b}
+  .snap td.num{font-variant-numeric:tabular-nums;color:var(--teal-dark);font-weight:700}
+  .snap tr:last-child td{border-bottom:none}
+
+  /* the beats */
+  .beats{display:grid;gap:12px}
+  .beat{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .beat .bn{height:34px;width:34px;border-radius:9px;background:var(--ground);color:#fff;font-weight:700;
+    display:grid;place-items:center;font-size:14px}
+  .beat .say{font-weight:700;font-size:15px}.beat .eg{font-size:14px;color:var(--muted);margin-top:2px}
+  .beat .eg b{color:var(--teal-dark);font-weight:600}
+  .beat.extra .bn{background:var(--teal)}
+
+  /* spoken answers (no screen) */
+  .spoken{display:grid;gap:16px}
+  .sp{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+  .sp-label{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:#fff;background:var(--teal);padding:4px 10px;border-radius:20px;margin-bottom:10px}
+  .sp-q{font-weight:700;font-size:15.5px;margin-bottom:8px}
+  .sp-words{font-size:15.5px;color:#1e293b;line-height:1.7;border-left:3px solid var(--teal);
+    background:var(--teal-soft);padding:12px 16px;border-radius:0 10px 10px 0}
+  .sp-terms{font-size:13px;color:var(--muted);margin-top:10px}
+  .sp-terms b{color:var(--ink);font-weight:600}
+
+  /* glossary */
+  .gloss{display:grid;gap:0}
+  .gitem{padding:14px 0;border-bottom:1px solid var(--line)}
+  .gitem:last-child{border-bottom:none}
+  .g-term{font-weight:700;font-size:15px;color:var(--ink)}
+  .g-term .chip{font-size:11px;font-weight:700;color:var(--teal-dark);background:var(--teal-soft);
+    padding:2px 8px;border-radius:6px;margin-left:8px;text-transform:uppercase;letter-spacing:.04em}
+  .g-def{font-size:14.5px;color:#475569;margin-top:4px;max-width:80ch}
+  .g-def b{color:var(--ink)}
+
+  /* click path */
+  .clicks{display:grid;gap:10px}
+  .click{display:flex;gap:12px;align-items:baseline;font-size:15px}
+  .click .cn{color:var(--teal-dark);font-weight:800;font-size:13px;min-width:54px}
+  .click b{color:var(--ink)}
+
+  /* dialogue Q&A */
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:11px;overflow:hidden}
+  details[open]{border-color:#99f6e4;box-shadow:0 4px 16px -9px rgba(13,148,136,.3)}
+  summary{cursor:pointer;list-style:none;padding:15px 20px;display:flex;gap:12px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary .who{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+    background:#f1f5f9;padding:3px 8px;border-radius:6px;flex-shrink:0}
+  summary .q{font-weight:650;font-size:15.5px}
+  summary .chev{margin-left:auto;color:var(--muted);transition:.2s;font-size:12px;flex-shrink:0}
+  details[open] summary .chev{transform:rotate(180deg)}
+  .say-block{padding:4px 20px 18px 20px}
+  .say-block .youtag{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:6px}
+  .say-block .words{font-size:15.5px;color:#1e293b;line-height:1.7;border-left:3px solid var(--teal);
+    background:var(--teal-soft);padding:12px 16px;border-radius:0 10px 10px 0}
+  .say-block .tip{font-size:13px;color:var(--muted);margin-top:9px}.say-block .tip b{color:var(--amber)}
+
+  /* JD map */
+  .jd{width:100%;border-collapse:collapse;font-size:14px}
+  .jd th{text-align:left;color:var(--muted);font-weight:700;padding:9px 12px;border-bottom:2px solid var(--line);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .jd td{padding:10px 12px;border-bottom:1px solid var(--line);color:#1e293b;vertical-align:top}
+  .jd tr:last-child td{border-bottom:none}
+  .tick{color:#0d9488;font-weight:800}.part{color:#d97706;font-weight:800}.no{color:#94a3b8;font-weight:700}
+  .jd .lvl{white-space:nowrap;font-weight:700}
+
+  /* siemens */
+  .bridge{background:linear-gradient(135deg,#0f172a,#134e4a);color:#e2e8f0;border:none}
+  .bridge h2{color:#5eead4}.bridge .h2sub{color:#fff}
+  .maprow{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin:8px 0}
+  .mapbox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;font-size:14px}
+  .mapbox .t{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#5eead4;font-weight:700;margin-bottom:3px}
+  .arrow{color:#5eead4;font-size:20px;text-align:center}
+  .pitch{background:rgba(94,234,212,.1);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin-top:16px;font-size:15px;color:#d1fae5}.pitch b{color:#fff}
+
+  footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--muted);font-size:12px;line-height:1.7}
+
+  @media(max-width:640px){
+    header.hero h1{font-size:27px}.h2sub{font-size:20px}
+    .maprow{grid-template-columns:1fr;gap:8px}.arrow{transform:rotate(90deg)}
+    .snap th:nth-child(2),.snap td:nth-child(2){display:none}
+  }
+  @media print{
+    body{background:#fff}.cta,.btn{display:none}
+    header.hero,.bridge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    details{break-inside:avoid} details:not([open]) .say-block{display:block!important}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="logo">★</div>
+      <div><b>StarSense</b><span>Amazon Rating Recommender</span></div>
+    </div>
+    <p class="kicker">How I'd talk through it</p>
+    <h1>My notes for explaining this — in plain words.</h1>
+    <p class="lede">What the project is for, the story of how I built it, and answers written the way I'd
+      actually say them — including how to explain it if I <em>can't</em> share my screen.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://amazon-rating-recommender.vercel.app" target="_blank">▶ Open the live app</a>
+      <a class="btn btn-ghost" href="#noshare">If I can't share my screen</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- PURPOSE -->
+  <section>
+    <h2>Start here</h2>
+    <div class="h2sub">What this project is for</div>
+    <div class="card purpose">
+      <p><b>The problem:</b> a shop like Amazon has millions of products, and it wants to show each shopper the
+        things they'll actually like. To do that, it needs to <b>guess how a shopper would rate a product before
+        they've bought it</b>. The catch: most products have barely been rated — in my data the <b>typical product
+        was rated just once</b>, and some products are brand new with no ratings at all. A simple system falls apart
+        exactly there.</p>
+      <p><b>What I built:</b> StarSense predicts the <b>star rating (1–5)</b> a shopper would give any product —
+        even a product it has <b>never seen before</b> — and it <b>explains which method it used and why</b>. It's a
+        <b>recommendation engine</b>: the same score that says "you'd give this 4.6" is what you'd use to rank and
+        recommend.</p>
+      <p><b>Why it matters for me:</b> it's my proof that I can take real, messy ratings data all the way to a
+        product someone can click and use — with a model that stays <b>honest and explainable</b>. And it's the
+        <b>same shape as Siemens' service problem</b>: predict a score for a huge catalogue of items where most are
+        rarely seen, and hand a trustworthy, explained answer to a person — just with service parts and error codes
+        instead of products.</p>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section>
+    <h2>The whole thing, simply</h2>
+    <div class="h2sub">How I built it, from the start</div>
+    <p class="lead-note">If someone says "tell me about your project," this is the plain-English version — the
+      technical words are in teal so I remember to actually say them.</p>
+    <div class="card story">
+      <div class="srow"><div class="snum">1</div><p><b>The data and what I'm predicting.</b> I started with about
+        <b>745,000 real Amazon ratings</b> — around <b>2,000 shoppers</b> rating roughly <b>201,000 products</b>
+        (mostly movies and DVDs). Each row is "this shopper gave this product this many stars." The thing I'm
+        predicting — the <span class="term">target variable</span> — is that <b>star rating, 1 to 5</b>. The
+        important quirk: the <b>median product was rated only once</b>, so most of the catalogue is barely known.</p></div>
+      <div class="srow"><div class="snum">2</div><p><b>Cleaning and pre-processing.</b> The data itself was tidy —
+        no missing values — so the real work was preparing the <b>product name</b>, because the name is my main
+        signal for brand-new items. I <span class="term">cleaned</span> each name with <span class="term">Python
+        and pandas</span>: lower-cased it, stripped out noise like "(Special Edition)" or "(Blu-ray)", removed years,
+        and standardised the spacing. Then I <span class="term">pre-computed statistics</span> — each shopper's
+        average rating and each product's average rating, with a <b>confidence</b> based on how many ratings back
+        them.</p></div>
+      <div class="srow"><div class="snum">3</div><p><b>The model.</b> I built a <span class="term">hybrid
+        recommender</span> — three methods behind one smart switch (a <span class="term">router</span>). If a
+        product has enough ratings, it uses <span class="term">collaborative filtering</span> (an algorithm called
+        <span class="term">SVD</span>) — "people who agreed with you before will probably agree again." If it's been
+        rated only a handful of times, it uses a <span class="term">statistical blend</span> of the shopper's habits
+        and the product's average. And if it's <b>never been seen</b>, it reads the product's <b>name</b> with
+        <span class="term">NLP (TF-IDF)</span> to find similar products and borrow their ratings.</p></div>
+      <div class="srow"><div class="snum">4</div><p><b>The extra — the cold-start part.</b> The hard, interesting
+        piece is that third method — the <span class="term">cold start</span>. Most recommenders just give up on a
+        brand-new item. Mine doesn't: because it can read the name, it still gives a sensible, explained answer for a
+        product it has literally never encountered. And every prediction says <b>which of the three methods fired and
+        why</b> — so it's never a black box.</p></div>
+      <div class="srow"><div class="snum">5</div><p><b>The website.</b> Finally I <b>wrapped it all in a simple
+        website</b> and <b>deployed it live</b> — a page where you pick a shopper and a product and see the predicted
+        rating with its explanation, plus a second page that shows how well the whole thing is performing. Anyone,
+        technical or not, can click around.</p></div>
+    </div>
+  </section>
+
+  <!-- DATA SNAPSHOT -->
+  <section>
+    <h2>What the data looks like</h2>
+    <div class="h2sub">A few rows, so it's concrete</div>
+    <p class="lead-note">Every prediction comes from data like this — one row is one shopper rating one product.</p>
+    <div class="card">
+      <table class="snap">
+        <thead><tr><th>Shopper</th><th>Product (name)</th><th>Stars</th><th># helpful votes</th></tr></thead>
+        <tbody>
+          <tr><td>#1813</td><td>Beautiful Thing</td><td class="num">5</td><td>8</td></tr>
+          <tr><td>#1944</td><td>Almost Famous</td><td class="num">5</td><td>2</td></tr>
+          <tr><td>#534</td><td>A Clockwork Orange</td><td class="num">5</td><td>5</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:14px;color:var(--muted);margin-top:14px">
+        <b style="color:var(--ink)">Scale:</b> ~745,000 rows · 2,000 shoppers · 201,000 products &nbsp;·&nbsp;
+        <b style="color:var(--ink)">The quirk that drives everything:</b> the middle product has been rated
+        <b style="color:var(--ink)">just once</b>, and ~<b style="color:var(--ink)">9%</b> of the products I'm
+        asked to score at test time were <b style="color:var(--ink)">never seen in training</b>. That's why the
+        cold-start method exists.</p>
+    </div>
+  </section>
+
+  <!-- IF I CAN'T SHARE MY SCREEN -->
+  <section id="noshare">
+    <h2>If I can't share my screen</h2>
+    <div class="h2sub">The key questions, answered out loud</div>
+    <p class="lead-note">Even with no screen, I can still explain each piece clearly. These are my go-to answers —
+      the teal box is what I'd say, the grey line is the key terms to make sure I land.</p>
+    <div class="spoken">
+
+      <div class="sp">
+        <span class="sp-label">Prediction model</span>
+        <div class="sp-q">"What prediction model did you use, and how?"</div>
+        <div class="sp-words">"It's a <b>hybrid recommender</b>. The core is <b>collaborative filtering</b> using
+          an algorithm called <b>SVD</b> — the plain-English version is 'people who agreed with you in the past will
+          probably agree with you again,' and SVD is the maths that finds those hidden taste patterns from everyone's
+          ratings. But SVD needs history, so I wrapped two fallbacks around it: a <b>statistical blend</b> for
+          thinly-rated items, and a <b>content method</b> that reads the product name for items with no history at
+          all. A little switch — a <b>router</b> — sends each request to the right one. On ratings it had never seen,
+          it's typically within about <b>0.8 of a star</b>."</div>
+        <div class="sp-terms"><b>Key terms:</b> hybrid recommender · collaborative filtering (SVD) · statistical
+          fallback · content/NLP cold-start · router · ~0.81 RMSE</div>
+      </div>
+
+      <div class="sp">
+        <span class="sp-label">Cold start · NLP</span>
+        <div class="sp-q">"What do you do for a product nobody has ever rated?"</div>
+        <div class="sp-words">"That's the <b>cold-start</b> problem, and it's the part I'm proudest of. When there's
+          no rating history, I fall back to the one thing I do have — the product's <b>name</b>. I turn that text into
+          numbers with a standard <b>NLP</b> technique called <b>TF-IDF</b>, find the known products whose names are
+          most similar, and borrow their average ratings. So even for a title the model has literally never seen, it
+          gives a sensible answer — and it can show you the similar products it leaned on."</div>
+        <div class="sp-terms"><b>Key terms:</b> cold start = no history · read the name · TF-IDF (text → numbers) ·
+          borrow ratings from similar items</div>
+      </div>
+
+      <div class="sp">
+        <span class="sp-label">Honest testing</span>
+        <div class="sp-q">"How do you know it actually works — and isn't cheating?"</div>
+        <div class="sp-words">"I hid a chunk of ratings, trained on the rest, then checked its guesses against the
+          real answers I'd hidden. I measure the error with <b>RMSE</b> — roughly, the typical gap between the guess
+          and the truth, in stars; lower is better, and I get about <b>0.81</b>. Crucially I always compare it to
+          <b>lazy baselines</b> — like 'just guess everyone's average' — and mine beats them clearly. I also tested it
+          two ways: the realistic way (shoppers I know, some new products), and a deliberately brutal way (all-new
+          shoppers). The gap between those two numbers tells me exactly how much knowing a shopper's history is
+          worth."</div>
+        <div class="sp-terms"><b>Key terms:</b> hold out ratings · RMSE (typical error in stars) · beat a lazy
+          baseline · two test splits = honest, not cheating</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GLOSSARY -->
+  <section>
+    <h2>What every word means</h2>
+    <div class="h2sub">So I can explain the app, not just show it</div>
+    <p class="lead-note">Two lines on each term the app uses — what it is, in plain English, and why it's there.</p>
+    <div class="card gloss">
+      <div class="gitem">
+        <div class="g-term">What we've done <span class="chip">the one-liner</span></div>
+        <div class="g-def">Built a system that <b>predicts the star rating a shopper would give a product</b> — even
+          products almost nobody has rated — and <b>explains each guess</b>. Same score powers recommendations.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Collaborative filtering <span class="chip">SVD</span></div>
+        <div class="g-def">The "<b>people like you</b>" method. It learns hidden taste patterns from everyone's past
+          ratings — if you and I agreed on ten films, it bets we'll agree on the eleventh. <b>SVD</b> is the specific
+          maths: it squeezes the giant shopper-by-product table into small "taste fingerprints" and multiplies them
+          back to fill in a missing rating. I use it when a product has <b>enough ratings</b> to trust.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Statistical blend <span class="chip">the middle case</span></div>
+        <div class="g-def">For a product rated only a <b>few</b> times, there isn't enough for the taste engine. So I
+          make a sensible guess by <b>blending</b> three things: how generous this shopper usually is, the product's
+          own average, and similar products' averages — each <b>weighted by how much data backs it</b> (its
+          confidence). More data → more say.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Content / NLP cold-start <span class="chip">TF-IDF</span></div>
+        <div class="g-def">For a product with <b>no ratings at all</b>, I read its <b>name</b>. <b>NLP</b> just means
+          getting a computer to work with human text; <b>TF-IDF</b> is a classic way to turn a name into numbers by
+          weighting the words that make it distinctive. I then find the closest-named known products and borrow their
+          ratings. This is the <b>cold-start</b> tier — the hard, interesting part.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Cold start <span class="chip">say this clearly</span></div>
+        <div class="g-def">The problem of guessing for a <b>brand-new item or shopper with no history</b>. It's the
+          make-or-break of any recommender: in my data the typical product has <b>one</b> rating, so cold-start isn't
+          a rare edge case — it's most of the catalogue.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">RMSE <span class="chip">the score</span></div>
+        <div class="g-def">"Root-mean-square error" — in plain terms, the <b>typical size of the mistake</b>, in
+          stars. <b>Lower is better.</b> Mine is about <b>0.81</b>, so a guess is usually within ~0.8 of a star of
+          the truth. I use it because it's the standard, honest way to score a rating prediction.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Baseline <span class="chip">the sanity check</span></div>
+        <div class="g-def">The <b>lazy version</b> to beat — e.g. "just guess the global average," or "guess this
+          shopper's average." If my proper model can't beat those, it hasn't earned its keep. Mine beats them all
+          clearly, which proves it's actually learning something.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Strategy mix <span class="chip">tier mix</span></div>
+        <div class="g-def">What <b>share of predictions each of the three methods handled</b>. Here it's roughly
+          <b>77%</b> collaborative, <b>9%</b> statistical, <b>14%</b> cold-start. It shows the system leans on the
+          strong method when it can, and only falls back when it must.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Calibration <span class="chip">is it trustworthy?</span></div>
+        <div class="g-def">"When the model says <b>4.5</b>, is the real answer actually around 4.5?" Calibration
+          checks that. I group predictions into buckets and compare the <b>average predicted</b> with the <b>average
+          actual</b> in each bucket — if those two lines sit close, the scores mean what they say and a person can
+          trust them.</div>
+      </div>
+      <div class="gitem">
+        <div class="g-term">Prediction distribution <span class="chip">a sanity check</span></div>
+        <div class="g-def">The <b>spread of all the guesses</b> — the average, the range, how many are low (under 3)
+          versus high (over 4.5). Real Amazon ratings lean high (lots of 5s), so the guesses should lean high too. If
+          they bunched up somewhere strange, that'd warn me something's off.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRUCTURE -->
+  <section>
+    <h2>The structure to lean on</h2>
+    <div class="h2sub">However they ask it, walk these 6 beats</div>
+    <p class="lead-note">Almost every technical question is really "walk me through it." Go through these in order
+      and I never freeze — the bold is the sentence I start with, the grey is how it fills in for this project.</p>
+    <div class="beats">
+      <div class="beat"><div class="bn">1</div><div><div class="say">"I started with the data…"</div>
+        <div class="eg"><b>Here:</b> ~745K real Amazon ratings; I'm predicting the 1–5 star rating. Most products rated only once.</div></div></div>
+      <div class="beat"><div class="bn">2</div><div><div class="say">"I cleaned and pre-processed it…"</div>
+        <div class="eg"><b>Here:</b> cleaned product names in Python/pandas (stripped edition tags, years); pre-computed shopper &amp; product stats with a confidence.</div></div></div>
+      <div class="beat"><div class="bn">3</div><div><div class="say">"Then I picked a model, because…"</div>
+        <div class="eg"><b>Here:</b> a hybrid — SVD collaborative filtering, with statistical and NLP fallbacks — because no single method survives the cold-start tail.</div></div></div>
+      <div class="beat"><div class="bn">4</div><div><div class="say">"Here's how well it did…"</div>
+        <div class="eg"><b>Here:</b> about 0.81 RMSE on unseen ratings — typically within ~0.8 of a star.</div></div></div>
+      <div class="beat"><div class="bn">5</div><div><div class="say">"I checked it against simple baselines…"</div>
+        <div class="eg"><b>Here:</b> beat 'guess the average,' 'guess the shopper's average,' and 'guess the item's average,' all clearly.</div></div></div>
+      <div class="beat"><div class="bn">6</div><div><div class="say">"And that led me to my next move…"</div>
+        <div class="eg"><b>Here:</b> make it explainable (which method + why) and put it on a live website with a monitoring page.</div></div></div>
+      <div class="beat extra"><div class="bn">+</div><div><div class="say">If they dig in — the extras</div>
+        <div class="eg">the <b>cold-start / NLP</b> tier, the <b>two-split honest testing</b>, and how it <b>maps to a service catalogue</b>.</div></div></div>
+    </div>
+  </section>
+
+  <!-- WHAT TO CLICK -->
+  <section>
+    <h2>If I DO get to share my screen</h2>
+    <div class="h2sub">The order to click — 3 minutes</div>
+    <p class="lead-note">Show the product first, talk about how it's built second.</p>
+    <div class="card clicks">
+      <div class="click"><span class="cn">Start</span><span><b>The intro</b> — "This is a system that guesses how a shopper would rate a product. Here's what the data looks like." Point at the sample rows.</span></div>
+      <div class="click"><span class="cn">Then</span><span><b>Predict a popular title</b> — pick a shopper and a well-known film, get the star guess, and read out the plain-English "why."</span></div>
+      <div class="click"><span class="cn">Then</span><span><b>The cold-start trick</b> — type a movie title I invent on the spot. "It's never seen this — watch it still reason about it from the name." Point at the similar titles it borrowed from.</span></div>
+      <div class="click"><span class="cn">End</span><span><b>Monitoring page</b> — "And here's how the whole thing is doing" — the error, how the three methods split the work, and whether the scores are trustworthy.</span></div>
+    </div>
+  </section>
+
+  <!-- CONVERSATION -->
+  <section>
+    <h2>The conversation</h2>
+    <div class="h2sub">Questions they'll ask, in my own words</div>
+    <p class="lead-note">Written the way I'd actually say them. The teal box is what I'd say; the small note is the
+      one thing to land.</p>
+    <div class="qa">
+
+      <details open>
+        <summary><span class="who">They ask</span><span class="q">So, walk me through what you built.</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"Sure. I had about 745,000 real Amazon ratings, and I'm predicting the star rating a
+            shopper would give a product. The tricky bit is that most products were rated only once, so I built a
+            hybrid recommender: collaborative filtering — the 'people like you' method — when there's enough history,
+            a statistical blend when there's a little, and an NLP method that reads the product name when there's none
+            at all. A small router picks the right one each time. It's within about 0.8 of a star on ratings it's
+            never seen, it beats the lazy baselines clearly, and every guess explains which method it used. Then I put
+            it on a live website with a monitoring page."</div>
+          <div class="tip"><b>Land this:</b> that's the whole 6-beat structure in one breath — data, cleaning, model, how it did, baseline, next move.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">What's a recommender system, really — and how does it predict a rating?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"At heart it's pattern-matching on taste. I have a huge table of who rated what. Most of
+            it is blank — nobody rates everything. A recommender fills in the blanks: given a shopper and a product,
+            it predicts the star rating they'd give. Once you can predict that rating, recommending is easy — you just
+            show them the products with the highest predicted scores."</div>
+          <div class="tip"><b>Land this:</b> "predict the missing rating → then rank by it." That's the whole idea.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">Explain collaborative filtering / SVD simply.</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"Collaborative filtering is the 'people who agreed with you before will agree again'
+            idea. SVD is the maths behind it. Imagine giving every shopper and every product a short list of hidden
+            'taste' numbers — say this shopper leans arthouse, that film is very arthouse. Multiply those together and
+            you get a predicted rating. SVD learns those hidden numbers from all the ratings at once. It's powerful,
+            but it only works for products with enough ratings to learn from — which is why I needed fallbacks."</div>
+          <div class="tip"><b>Land this:</b> "hidden taste fingerprints, multiplied together" — and note its weakness (needs history) so the hybrid makes sense.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">What happens when a product has no ratings — and why is that "NLP"?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"That's the cold-start problem, and it's most of my catalogue, not an edge case. With no
+            ratings, the only thing I have is the product's name. So I use NLP — getting the computer to work with text
+            — specifically TF-IDF, which turns a name into numbers by emphasising its distinctive words. Then I find
+            the known products with the most similar names and borrow their ratings. So a brand-new title still gets a
+            sensible, explained score. It's the same reason 'sci-fi robot detective' would sit near other sci-fi
+            titles even if I'd never seen that exact one."</div>
+          <div class="tip"><b>Land this:</b> "no history → read the name → TF-IDF → borrow from similar items." That's the NLP story the JD wants.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">0.81 error — is that any good? And what is RMSE?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"RMSE is basically the typical size of the mistake, in stars — lower is better. Mine's
+            about 0.81, so a guess is usually within about eight-tenths of a star. Is that good? The honest test is
+            the baselines: just guessing the average gives about 1.07, and guessing each shopper's own average gives
+            about 0.98. I'm well under both. I wouldn't want it to be near-zero — on real, noisy human ratings that
+            would mean I'd accidentally let the model see the answer."</div>
+          <div class="tip"><b>Land this:</b> always frame the number against a baseline — and note that "too perfect" is a red flag.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">How did you test it without cheating?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"I hid 15% of the ratings, trained on the rest, and scored the guesses against the hidden
+            truth. The subtle part is <em>how</em> you hide them. My realistic split keeps the shoppers known but lets
+            some products be new — that's how it'd actually run, since the shoppers are people we already have. I also
+            ran a deliberately harsh split where every shopper is brand-new, which is much harder. The realistic one
+            scores 0.81, the harsh one 1.08. That 0.27 gap is a real finding — it's a number for how much knowing a
+            shopper's history is worth."</div>
+          <div class="tip"><b>Land this:</b> "the way you split decides the number" — showing you thought about leakage is a senior signal.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">Why a hybrid — why not just one good model?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"Because no single method survives this data. Pure collaborative filtering is the most
+            accurate — but it goes blank the moment a product has no history, and that's most of my catalogue. Pure
+            'read the name' works everywhere but is weaker when there's real rating data to use. So I let each method
+            do what it's best at and route between them. The monitoring page shows the split — about 77% collaborative,
+            14% cold-start — and the collaborative tier really is the most accurate, which is exactly why it's worth
+            protecting it with fallbacks."</div>
+          <div class="tip"><b>Land this:</b> "use each method where it's strongest, fall back only when you must."</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">What is calibration, and why should I care?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"Calibration is whether the scores mean what they say. If I group all my '4.5-ish'
+            predictions and the real ratings in that group average about 4.5, the model's calibrated — a 4.5 really is
+            a 4.5. I check it on the monitoring page by lining up average-predicted against average-actual per bucket.
+            It matters because a business acts on the number — if the model quietly runs half a star high, everything
+            downstream is off."</div>
+          <div class="tip"><b>Land this:</b> "calibrated = the score can be trusted at face value." Ties directly to non-technical trust.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">If this were live at a company, how would you keep it working?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"I'd re-train it on a schedule as new ratings come in, and watch the error over time —
+            especially the cold-start tier, since that's the weakest. If the typical error started creeping up, or the
+            predictions drifted away from the real ratings on the calibration check, that's my signal to re-train or
+            dig in. That's exactly what the monitoring page is a first version of — you don't ship a model and walk
+            away."</div>
+          <div class="tip"><b>Land this:</b> "re-train on a schedule + watch for drift" — that's the 'monitoring' word the JD asks for.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">Did you use deep learning or neural networks?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"Not here, on purpose. For rating prediction on this kind of data, matrix factorisation
+            like SVD is a proven, strong choice and it's far easier to explain — which mattered to me. I know the
+            neural version — you'd swap SVD for learned embeddings and a small network, and that's a natural next step
+            if I had more signal per item. But I'd rather ship something I can fully defend than reach for a heavier
+            tool I don't need."</div>
+          <div class="tip"><b>Land this:</b> be honest it's not a neural net, but show you know the upgrade path and chose explainability deliberately.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">Explain it to someone who isn't technical at all.</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"It looks at how millions of people rated products, learns everyone's taste, and uses that
+            to guess how much you'd like something you haven't tried — even something brand new — and it can tell you
+            in plain words why it thinks so."</div>
+          <div class="tip"><b>Land this:</b> keep it to one sentence — it's the CXO / elevator answer.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">How does a movie recommender relate to a healthcare service role?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"The shape is identical. Swap 'shopper' for 'a machine or a service engineer,' and 'product'
+            for 'a spare part, an error code, or a fix.' You have a huge catalogue where most items are rarely seen,
+            and you want to predict a useful score — how relevant a fix is, or how satisfied a customer will be — and
+            hand it to a person with a reason attached. The cold-start method that reads a product name is the same
+            method that would read an error-log line. That's exactly the customer-service analytics problem in the
+            job."</div>
+          <div class="tip"><b>Land this:</b> "same shape, swap the nouns" — and the cold-start/NLP piece is the bridge to machine logs.</div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- JD MAP -->
+  <section>
+    <h2>Against the job description</h2>
+    <div class="h2sub">What this project actually covers — honestly</div>
+    <p class="lead-note">Green = clearly demonstrated here · amber = touched / partial · grey = not in this project
+      (and where I do cover it). Being honest about the greys is the point — I don't over-claim.</p>
+    <div class="card">
+      <table class="jd">
+        <thead><tr><th>JD asks for</th><th class="lvl">Level</th><th>Where in this project</th></tr></thead>
+        <tbody>
+          <tr><td>Predictive models — build, customise, train, validate</td><td class="lvl"><span class="tick">● strong</span></td><td>The whole thing: a custom hybrid rating predictor with a proper validation strategy (two honest splits, baselines).</td></tr>
+          <tr><td>Python · pandas · NumPy · scikit-learn</td><td class="lvl"><span class="tick">● strong</span></td><td>Cleaning, stats, TF-IDF and evaluation are all Python/pandas/scikit-learn; SVD via the Surprise library.</td></tr>
+          <tr><td>Unstructured data · NLP</td><td class="lvl"><span class="tick">● strong</span></td><td>The cold-start tier is NLP — TF-IDF over product-name text to handle never-seen items.</td></tr>
+          <tr><td>Deployment · monitoring</td><td class="lvl"><span class="tick">● strong</span></td><td>Deployed live on Vercel; a monitoring page tracks error, method-mix, coverage and calibration.</td></tr>
+          <tr><td>Dashboards · visualisation</td><td class="lvl"><span class="tick">● strong</span></td><td>The prediction console + monitoring cockpit are the stakeholder-facing dashboard.</td></tr>
+          <tr><td>Translate business need → measurable use case + success criteria</td><td class="lvl"><span class="tick">● strong</span></td><td>"Predict a rating for the long tail" → RMSE target, beat baselines, 100% coverage incl. cold-start.</td></tr>
+          <tr><td>Explain data science to non-technical stakeholders</td><td class="lvl"><span class="tick">● strong</span></td><td>Every prediction is explained; this whole document + the app are built for that.</td></tr>
+          <tr><td>Statistics · pattern recognition · ML concepts</td><td class="lvl"><span class="tick">● strong</span></td><td>Confidence-weighted stats, similarity, matrix factorisation, calibration.</td></tr>
+          <tr><td>SW engineering (GitHub, reproducible, modular)</td><td class="lvl"><span class="part">◐ partial</span></td><td>Refactored from notebook into clean modules + a one-command runner, on GitHub. (Full CI/CD is future work.)</td></tr>
+          <tr><td>Neural networks</td><td class="lvl"><span class="part">◐ partial</span></td><td>Used matrix factorisation, not a neural net — deliberate, for explainability. I can speak to the neural upgrade path.</td></tr>
+          <tr><td>Big data · PySpark · Parquet · Azure/Databricks</td><td class="lvl"><span class="no">○ elsewhere</span></td><td>Not here — my <b>property-market project</b> covers PySpark over 4.85M rows &amp; Parquet at scale.</td></tr>
+          <tr><td>SQL · Kusto · Snowflake</td><td class="lvl"><span class="no">○ elsewhere</span></td><td>Not in this project (it's file-based). SQL sits in my other analytics work.</td></tr>
+          <tr><td>Graph / Neo4j · Agentic AI</td><td class="lvl"><span class="no">○ not yet</span></td><td>Honest gap — roadmap, not claimed.</td></tr>
+          <tr><td>Healthcare domain</td><td class="lvl"><span class="part">◐ analogy</span></td><td>Bridged by analogy (service catalogue / cold-start), never as fabricated clinical data.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SIEMENS BRIDGE -->
+  <section>
+    <div class="card bridge">
+      <h2>The same idea, at Siemens</h2>
+      <div class="h2sub">A small, explainable use case I can offer them</div>
+      <p style="color:#cbd5e1;margin-bottom:18px;font-size:15px">"Here's the thing — what I built for products is the
+        exact same shape as your service problem. Just swap the nouns." Imagine a huge catalogue of service actions,
+        spare parts and error codes, where most are rarely seen. Same three moves:</p>
+      <div class="maprow">
+        <div class="mapbox"><div class="t">In StarSense</div>Predict the <b>rating</b> a shopper gives a product.</div>
+        <div class="arrow">→</div>
+        <div class="mapbox"><div class="t">At Siemens</div>Predict the <b>relevance / priority / CSAT</b> of a service action for a machine.</div>
+      </div>
+      <div class="maprow">
+        <div class="mapbox"><div class="t">In StarSense</div>Read a <b>product name</b> to handle a never-seen item.</div>
+        <div class="arrow">→</div>
+        <div class="mapbox"><div class="t">At Siemens</div>Read a <b>machine-log line</b> to handle a rare, new error signature.</div>
+      </div>
+      <div class="maprow">
+        <div class="mapbox"><div class="t">In StarSense</div>Explain <b>which method and why</b> for every score.</div>
+        <div class="arrow">→</div>
+        <div class="mapbox"><div class="t">At Siemens</div>Give the engineer a <b>reason</b> they'll trust, not a black-box alert.</div>
+      </div>
+      <div class="pitch">"And where I think it helps — a service team drowns in a long tail of rare parts and error
+        codes. This ranks and scores that tail, handles the brand-new cases from text alone, and <b>attaches a plain
+        reason to every answer</b> — so engineers actually trust it instead of ignoring another alert."</div>
+    </div>
+  </section>
+
+  <!-- ONE THING COLD -->
+  <section>
+    <h2>One thing worth knowing cold</h2>
+    <div class="h2sub">Why "cold start" is the whole point</div>
+    <div class="card">
+      <p style="font-size:15.5px;color:#1e293b"><b>Cold start</b> is the problem of making a good guess for a
+        <b>brand-new item or shopper with no history</b>. It sounds like a rare edge case — it isn't. In my data the
+        <b>median product has been rated exactly once</b>, and about <b>9%</b> of the products I'm scored on were
+        never seen in training at all. So handling cold-start isn't polish; it's <em>most of the job</em>.</p>
+      <p style="font-size:15.5px;color:#1e293b;margin-top:12px"><b>The one line to drop:</b> "A recommender that only
+        works on popular items is easy and useless — the value is in the long tail. Mine handles the never-seen items
+        by reading their names, and it maps directly to a service catalogue where the rare part or the new error code
+        is exactly the one you can't afford to get wrong."</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    StarSense is an independent portfolio project (originally the FIT5212 recommender-systems assignment). Data is a
+    remix of real Amazon product-review ratings. The model — a hybrid of SVD collaborative filtering, confidence-
+    weighted statistics, and TF-IDF content similarity for cold-start — is a simple, honest baseline, not a production
+    recommendation engine. Every prediction is explained and the model is monitored. &nbsp;·&nbsp; Live: amazon-rating-recommender.vercel.app
+  </div>
+</footer>
+
+</body>
+</html>

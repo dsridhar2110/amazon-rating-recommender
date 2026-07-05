@@ -1,0 +1,90 @@
+{
+  "1813::A Clockwork Orange": {
+    "rating": 4.4477,
+    "tier": "ENHANCED_SVD",
+    "reason": "Item has enough ratings \u2192 collaborative-filtering (SVD) prediction, confidence-blended with the global mean.",
+    "similar_items": [],
+    "user_id": 1813,
+    "product_name": "A Clockwork Orange",
+    "user_known": true
+  },
+  "534::Almost Famous": {
+    "rating": 4.2896,
+    "tier": "ENHANCED_SVD",
+    "reason": "Item has enough ratings \u2192 collaborative-filtering (SVD) prediction, confidence-blended with the global mean.",
+    "similar_items": [],
+    "user_id": 534,
+    "product_name": "Almost Famous",
+    "user_known": true
+  },
+  "534::The Completely Invented Space Western Vol 7": {
+    "rating": 4.3692,
+    "tier": "CONTENT_SIMILARITY",
+    "reason": "Item never seen in training (cold-start) \u2192 borrowed ratings from the most similar known items via TF-IDF on the name (NLP).",
+    "similar_items": [
+      {
+        "name": "ramses under the western acacia ramses under the western acacia vol 5",
+        "similarity": 0.771,
+        "mean_rating": 3.67
+      },
+      {
+        "name": "boundary waters canoe area the western region boundary waters canoe area",
+        "similarity": 0.655,
+        "mean_rating": 5.0
+      },
+      {
+        "name": "one dharma the emerging western buddhism",
+        "similarity": 0.655,
+        "mean_rating": 4.5
+      },
+      {
+        "name": "under the western freeway",
+        "similarity": 0.655,
+        "mean_rating": 5.0
+      },
+      {
+        "name": "the western lands",
+        "similarity": 0.655,
+        "mean_rating": 5.0
+      }
+    ],
+    "user_id": 534,
+    "product_name": "The Completely Invented Space Western Vol 7",
+    "user_known": true
+  },
+  "1944::Midnight Robot Detective: The Neon Case": {
+    "rating": 3.8594,
+    "tier": "CONTENT_SIMILARITY",
+    "reason": "Item never seen in training (cold-start) \u2192 borrowed ratings from the most similar known items via TF-IDF on the name (NLP).",
+    "similar_items": [
+      {
+        "name": "fires at midnight",
+        "similarity": 0.723,
+        "mean_rating": 4.5
+      },
+      {
+        "name": "automatic midnight",
+        "similarity": 0.723,
+        "mean_rating": 4.0
+      },
+      {
+        "name": "scraps at midnight",
+        "similarity": 0.723,
+        "mean_rating": 5.0
+      },
+      {
+        "name": "shooting at midnight",
+        "similarity": 0.723,
+        "mean_rating": 3.67
+      },
+      {
+        "name": "the clown at midnight",
+        "similarity": 0.723,
+        "mean_rating": 2.33
+      }
+    ],
+    "user_id": 1944,
+    "product_name": "Midnight Robot Detective: The Neon Case",
+    "user_known": true
+  }
+}

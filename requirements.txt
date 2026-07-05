@@ -1,13 +1,12 @@
-# FIT5212 Assignment 2 - Recommender System
-# Install: pip install -r requirements.txt
+# RecoPulse — training + serving deps (pinned for Python 3.9 compatibility)
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.13.1
+scikit-learn==1.5.2
+scikit-surprise==1.1.4
+joblib==1.4.2
 
-pandas>=1.5.0
-numpy>=1.21.0
-matplotlib>=3.5.0
-seaborn>=0.12.0
-scikit-learn>=1.2.0
-scikit-surprise>=1.1.0
-tqdm>=4.64.0
-lightgbm>=3.3.0
-xgboost>=1.7.0
-jupyter>=1.0.0
+# Serving (Phase 2)
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4

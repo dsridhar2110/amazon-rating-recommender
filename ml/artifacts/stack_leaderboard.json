@@ -1,0 +1,23 @@
+{
+  "holdout_rows": 50000,
+  "n_folds": 3,
+  "smoke": false,
+  "leaderboard": {
+    "SVD": 0.7983092214691744,
+    "SVD-wide": 0.8055544222576658,
+    "KNNBaseline": 0.8347229150353798,
+    "NMF": 1.049471346743032,
+    "LightGBM": 1.5804244142962924,
+    "Average (bases)": 0.8697865561829211,
+    "STACKED (meta-LGBM)": 0.7669379678124364,
+    "\u2014 shipped hybrid": 0.8104878312866817,
+    "\u2014 baseline: global mean": 1.0727210179141342
+  },
+  "base_models": [
+    "SVD",
+    "SVD-wide",
+    "KNNBaseline",
+    "NMF",
+    "LightGBM"
+  ]
+}

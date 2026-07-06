@@ -62,6 +62,16 @@
   .snap td.num{font-variant-numeric:tabular-nums;color:var(--teal-dark);font-weight:700}
   .snap tr:last-child td{border-bottom:none}
 
+  /* leaderboard table */
+  .board{width:100%;border-collapse:collapse;font-size:14.5px}
+  .board th{text-align:left;color:var(--muted);font-weight:700;padding:8px 12px;border-bottom:2px solid var(--line);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .board td{padding:8px 12px;border-bottom:1px solid var(--line);color:#1e293b}
+  .board td.num{font-family:ui-monospace,monospace;font-weight:700;text-align:right;width:78px}
+  .board tr:last-child td{border-bottom:none}
+  .board tr.win td{background:var(--teal-soft);font-weight:700}
+  .board tr.win td.num{color:var(--teal-dark)}
+  .board tr.ship td{background:#fffbeb}
+
   /* the beats */
   .beats{display:grid;gap:12px}
   .beat{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;
@@ -82,6 +92,27 @@
     background:var(--teal-soft);padding:12px 16px;border-radius:0 10px 10px 0}
   .sp-terms{font-size:13px;color:var(--muted);margin-top:10px}
   .sp-terms b{color:var(--ink);font-weight:600}
+
+  /* "explain this further" collapsible — study aid, hidden until clicked */
+  .learnmore{margin-top:12px;border:1px dashed #99f6e4;border-radius:10px;background:#f0fdfa;overflow:hidden}
+  .learnmore>summary{cursor:pointer;list-style:none;padding:10px 14px;font-size:13px;font-weight:700;
+    color:var(--teal-dark);display:flex;align-items:center;gap:8px}
+  .learnmore>summary::-webkit-details-marker{display:none}
+  .learnmore>summary .lm-chev{margin-left:auto;transition:.2s;font-size:11px}
+  .learnmore[open]>summary .lm-chev{transform:rotate(180deg)}
+  .learnmore[open]>summary{border-bottom:1px solid #99f6e4}
+  .learnmore .lm-body{padding:12px 16px 16px;font-size:14px;color:#334155;line-height:1.7}
+  .learnmore .lm-body h4{font-size:12.5px;color:var(--ink);margin:15px 0 3px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.03em}
+  .learnmore .lm-body h4:first-child{margin-top:0}
+  .learnmore .lm-body p{margin:0}.learnmore .lm-body b{color:var(--ink)}
+  .learnmore .lm-eg{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 12px;
+    margin:7px 0;font-size:13.5px;color:#475569}
+  .learnmore .lm-mini{width:100%;border-collapse:collapse;margin:8px 0}
+  .learnmore .lm-mini td{padding:7px 10px;border:1px solid var(--line);font-size:13px;vertical-align:top}
+  .learnmore .lm-mini td:first-child{font-weight:700;color:var(--ink);white-space:nowrap;width:96px}
+  .learnmore .lm-mini td.num{font-family:ui-monospace,monospace;color:var(--teal-dark);font-weight:700;
+    text-align:right;width:52px}
 
   /* glossary */
   .gloss{display:grid;gap:0}
@@ -140,6 +171,20 @@
     .maprow{grid-template-columns:1fr;gap:8px}.arrow{transform:rotate(90deg)}
     .snap th:nth-child(2),.snap td:nth-child(2){display:none}
   }
+  /* tech stack grid + cloud map (added) */
+  .stack{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  .st{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .st .layer{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--teal-dark);margin-bottom:6px}
+  .st .tool{font-size:14.5px;font-weight:700;color:var(--ink)}
+  .st .why{font-size:13px;color:#475569;margin-top:3px}
+  .cloudmap{margin-top:16px;background:var(--teal-soft);border:1px solid #99f6e4;border-radius:12px;padding:16px 18px}
+  .cloudmap .ct{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:4px}
+  .cloudmap .csub{font-size:12.5px;color:var(--muted);margin-bottom:10px;max-width:72ch}
+  .cloudmap .crow{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13.5px;padding:7px 0;border-bottom:1px solid #cdeee9;align-items:center}
+  .cloudmap .crow:last-child{border-bottom:none}
+  .cloudmap .cin{color:#334155}.cloudmap .cin b{color:var(--ink)}
+  .cloudmap .cto b{color:var(--teal-dark)}
+  @media(max-width:640px){.stack{grid-template-columns:1fr}.cloudmap .crow{grid-template-columns:1fr;gap:3px}}
   @media print{
     body{background:#fff}.cta,.btn{display:none}
     header.hero,.bridge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -298,6 +343,50 @@
           worth."</div>
         <div class="sp-terms"><b>Key terms:</b> hold out ratings · RMSE (typical error in stars) · beat a lazy
           baseline · two test splits = honest, not cheating</div>
+
+        <details class="learnmore">
+          <summary>Explain this to me further, in plain terms <span class="lm-chev">▼</span></summary>
+          <div class="lm-body">
+            <h4>1 · "I hid a chunk of ratings"</h4>
+            <p>It's like a practice exam where I already have the answer key. If the model studies <em>all</em> the
+              ratings and I then quiz it on those <em>same</em> ratings, it can just memorise them and look perfect —
+              which tells me nothing about new cases. So I hide about 15% (put the answers in a drawer), let it learn
+              from the other 85%, then mark its guesses on the hidden ones. Now the score is honest. The jargon is a
+              <b>train/test split</b>.</p>
+
+            <h4>2 · "I measure the error with RMSE — about 0.81"</h4>
+            <p>RMSE is just "on average, how far off is a guess, in stars." Lower is better.</p>
+            <div class="lm-eg">If it guesses <b>4.2</b> and the truth was <b>5</b>, it's off by <b>0.8</b>. Do that
+              across every hidden rating and the typical miss is my RMSE: <b>0.81</b> — usually within about
+              eight-tenths of a star.</div>
+            <p>If they push: the "square" in RMSE punishes <em>big</em> misses more than small ones — being off by 2
+              stars hurts the score far more than being off by 0.5. That's on purpose.</p>
+
+            <h4>3 · "I compare it to lazy baselines"</h4>
+            <p>0.81 means nothing on its own — good compared to <em>what</em>? So I build the laziest guesses to beat:
+              "just guess everyone's average" scores about <b>1.07</b>; "guess this shopper's own average" about
+              <b>0.98</b>. Mine gets <b>0.81</b> — clearly better than both. <b>That</b> is what proves it learned real
+              taste, not just the obvious.</p>
+
+            <h4>4 · "I tested it two ways"</h4>
+            <p>The clever bit — <em>how</em> I hide the ratings changes <em>what</em> I'm testing:</p>
+            <table class="lm-mini">
+              <tr><td>Realistic way</td><td>Hide random ratings, but the shoppers are still known (only some products
+                are new) — like real life, where customers are people we already have history on.</td><td class="num">0.81</td></tr>
+              <tr><td>Brutal way</td><td>Hide whole shoppers, so every test shopper is a total stranger with no history
+                — it can't personalise at all.</td><td class="num">1.08</td></tr>
+            </table>
+            <p>The <b>gap (1.08 − 0.81 ≈ 0.27)</b> is a number for how much knowing a shopper is worth. A returning
+              customer → ~0.81 error; a stranger → ~1.08. So a shopper's history is worth about <b>0.27 stars</b> of
+              accuracy — which turns a technical choice into a business sentence: <em>"capturing customer history early
+              is the highest-value thing we can do, and here's exactly how much."</em></p>
+
+            <h4>Why an interviewer loves this</h4>
+            <p>Most people report one number. I report two and explain <em>why they differ</em> — that shows I
+              understand <b>leakage</b> and <b>evaluation design</b>. If they ask "which is the real number?":
+              <b>the 0.81</b> — in production every shopper is known; the 1.08 is a deliberate stress test.</p>
+          </div>
+        </details>
       </div>
 
     </div>
@@ -529,6 +618,42 @@
             dig in. That's exactly what the monitoring page is a first version of — you don't ship a model and walk
             away."</div>
           <div class="tip"><b>Land this:</b> "re-train on a schedule + watch for drift" — that's the 'monitoring' word the JD asks for.</div>
+
+          <details class="learnmore">
+            <summary>Explain data drift vs. model drift, in plain terms <span class="lm-chev">▼</span></summary>
+            <div class="lm-body">
+              <p><b>Two causes, one symptom.</b> <b>Model drift</b> (or "decay") is just my model quietly getting
+                <em>worse</em> in production over time. It has two possible causes:</p>
+              <h4>Data drift — the inputs change</h4>
+              <p>The data coming in starts to look different from what I trained on. <b>Example:</b> I trained on
+                movie/DVD ratings, but the shop pivots to selling gadgets — now my cold-start tier is reading
+                "Wireless Earbuds Pro Max" instead of film titles. The model works the same, but it's seeing a world it
+                never learned.</p>
+              <h4>Concept drift — the meaning changes</h4>
+              <p>The inputs look the same, but the <em>right answer</em> changes. <b>Example:</b> a beloved film gets
+                review-bombed after a controversy — same movie, but it now maps to 1 star instead of 5. The
+                user→rating pattern I learned no longer holds.</p>
+              <h4>How I'd catch each — and fix it</h4>
+              <p><b>Data drift:</b> watch whether the incoming products/ratings look different over time.
+                <b>Concept drift:</b> watch my error and calibration on the monitoring page — if RMSE creeps from 0.81
+                up to 0.95, something drifted. <b>Fix for both:</b> re-train on fresh data, on a schedule or when drift
+                crosses a threshold.</p>
+              <div class="lm-eg"><b>Siemens version:</b> a new scanner model joins the fleet with unfamiliar readings
+                = <b>data drift</b>; a firmware update changes what "healthy" looks like = <b>concept drift</b>.</div>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="who">They ask</span><span class="q">Is 0.81 the best you can do? Did you try to beat it?</span><span class="chev">▼</span></summary>
+        <div class="say-block"><div class="youtag">I'd say</div>
+          <div class="words">"I did — and I'll be honest about it. I built a stacked ensemble of five models, and a
+            meta-learner that learns how much to trust each one got it down to about <b>0.767</b> — roughly a 5%
+            improvement. But that's a less-explainable black box, and for a service team that has to trust the score,
+            I'd still ship the simpler, explainable model. So no, 0.81 isn't the theoretical best — but knowing the
+            ceiling and choosing not to chase it was the point."</div>
+          <div class="tip"><b>Land this:</b> owning the ceiling — "I know how to squeeze more, I chose explainability" — is a senior signal. (Full leaderboard in "How far I pushed it".)</div>
         </div>
       </details>
 
@@ -567,6 +692,72 @@
         </div>
       </details>
 
+    </div>
+  </section>
+
+  <!-- HOW FAR I PUSHED IT -->
+  <section>
+    <h2>How far I pushed it</h2>
+    <div class="h2sub">I tried the heavy machinery — here's what each model bought</div>
+    <p class="lead-note">My shipped model is the explainable hybrid at <b>0.81</b>. To answer "is that the best you can
+      do?", I built a <b>stacked ensemble</b> — five models combined by a meta-learner that <em>learns</em> how much to
+      trust each one. Same 50,000 held-out ratings, so it's a fair comparison.</p>
+
+    <div class="card">
+      <table class="board">
+        <thead><tr><th>Model</th><th>RMSE</th><th>Read</th></tr></thead>
+        <tbody>
+          <tr class="win"><td>STACKED (meta-learner)</td><td class="num">0.767</td><td>the winner</td></tr>
+          <tr><td>SVD (tuned)</td><td class="num">0.798</td><td>best single model</td></tr>
+          <tr><td>SVD-wide</td><td class="num">0.806</td><td>diversity for the stack</td></tr>
+          <tr class="ship"><td>My shipped hybrid</td><td class="num">0.811</td><td>what I actually deploy</td></tr>
+          <tr><td>KNNBaseline</td><td class="num">0.835</td><td>neighbourhood model</td></tr>
+          <tr><td>Average of the 5 (dumb blend)</td><td class="num">0.870</td><td>blindly averaging hurts</td></tr>
+          <tr><td>NMF</td><td class="num">1.050</td><td>weak here</td></tr>
+          <tr><td>Baseline: guess the average</td><td class="num">1.073</td><td>the floor to beat</td></tr>
+          <tr><td>LightGBM (on features)</td><td class="num">1.580</td><td>weakest — see below</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="lead-note" style="margin-top:18px;margin-bottom:12px">Why each model landed where it did — two lines each:</p>
+    <div class="card gloss">
+      <div class="gitem"><div class="g-term">SVD — the strongest single model <span class="chip">0.798</span></div>
+        <div class="g-def">Matrix factorization that <b>shrinks thin, noisy ratings toward the average</b>, so it stays
+          steady on a catalogue where most items are rated only once. That robustness is why it quietly beats even my
+          shipped hybrid.</div></div>
+      <div class="gitem"><div class="g-term">SVD-wide — same idea, more capacity <span class="chip">0.806</span></div>
+        <div class="g-def">More factors and heavier regularization. Slightly worse alone (more room to over-fit sparse
+          data), but it makes <b>different mistakes</b> than plain SVD — which is useful variety for the stack to blend.</div></div>
+      <div class="gitem"><div class="g-term">KNNBaseline — "find similar users" <span class="chip">0.835</span></div>
+        <div class="g-def">A neighbourhood model that copies people with similar taste. But with the median product
+          rated only once, there aren't enough <b>shared ratings</b> to find reliable neighbours — so it's weaker than
+          the factorization models.</div></div>
+      <div class="gitem"><div class="g-term">NMF — factorization with a strict rule <span class="chip">1.050</span></div>
+        <div class="g-def">Like SVD, but it forces every hidden factor to be <b>positive</b>. That constraint is too
+          rigid for this noisy, 5-star-skewed data, so it barely beats just guessing the average.</div></div>
+      <div class="gitem"><div class="g-term">LightGBM — why it lost to SVD <span class="chip">1.580</span></div>
+        <div class="g-def">A tree model fed each item's <b>raw average rating</b>. But most items have only one rating,
+          so those averages are unreliable and it <b>over-trusts them</b>, swinging wildly. SVD avoids this by
+          mathematically shrinking shaky items toward the overall average — which is exactly why SVD wins.</div></div>
+      <div class="gitem"><div class="g-term">Average of all five — why blending blindly hurt <span class="chip">0.870</span></div>
+        <div class="g-def">A plain average <b>drags the strong SVD down</b> with the weak NMF and LightGBM. The lesson:
+          averaging models blindly can be worse than just using your best single model.</div></div>
+      <div class="gitem"><div class="g-term">STACKED — why the learned blend won <span class="chip">0.767</span></div>
+        <div class="g-def">Instead of averaging, a small meta-model <b>learns how much to trust each base</b> depending
+          on context — like how many ratings an item has. It leans on SVD, borrows useful scraps from the others, and
+          ignores the junk — so it beats every single model.</div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-soft);border-color:#99f6e4">
+      <p style="font-size:15px;color:#1e293b"><b>The verdict I'd give:</b> "My shipped model is 0.81 and fully
+        explainable. I built a stacked ensemble that reached <b>0.767</b> — about a 5% improvement — but it's a
+        less-explainable black box, so for a service team that has to trust the output I still ship the simpler one.
+        Knowing the ceiling, and choosing not to chase it, was the point."</p>
+      <p style="font-size:13.5px;color:var(--muted);margin-top:10px">Two extras worth dropping: I also tried
+        <b>SVD++</b>, but it was ~40× slower for a negligible gain, so I cut it — knowing when a heavier model isn't
+        worth it. And I kept the test honest: the same held-out ratings for every model, and no vote-count features
+        that wouldn't exist before a rating is even made (that would be leakage).</p>
     </div>
   </section>
 
@@ -641,6 +832,31 @@
         works on popular items is easy and useless — the value is in the long tail. Mine handles the never-seen items
         by reading their names, and it maps directly to a service catalogue where the rare part or the new error code
         is exactly the one you can't afford to get wrong."</p>
+    </div>
+  </section>
+
+  <!-- TECH STACK (added) -->
+  <section>
+    <h2>The tech stack</h2>
+    <div class="h2sub">What each layer is built with</div>
+    <p class="lead-note">If they ask “what did you build it with?” — every layer, and the one job it does.</p>
+    <div class="stack">
+      <div class="st"><div class="layer">Language</div><div class="tool">Python 3</div><div class="why">One language across training, evaluation and serving.</div></div>
+      <div class="st"><div class="layer">Data wrangling</div><div class="tool">pandas · NumPy · SciPy</div><div class="why">Clean ratings, build the user–item matrix.</div></div>
+      <div class="st"><div class="layer">Collaborative filtering</div><div class="tool">scikit-surprise (SVD)</div><div class="why">Matrix factorisation for items with enough ratings.</div></div>
+      <div class="st"><div class="layer">Content / NLP tier</div><div class="tool">scikit-learn (TF-IDF)</div><div class="why">Cold-start — recommend from item text when there's no history.</div></div>
+      <div class="st"><div class="layer">Serving</div><div class="tool">FastAPI + Uvicorn + Pydantic</div><div class="why">Numpy-only inference behind /predict, /explain, /metrics.</div></div>
+      <div class="st"><div class="layer">Evaluation</div><div class="tool">RMSE · MAE · R² vs baselines</div><div class="why">Honest metrics + 100% coverage incl. cold-start.</div></div>
+      <div class="st"><div class="layer">Frontend</div><div class="tool">Next.js + React + Tailwind</div><div class="why">Prediction console + monitoring cockpit.</div></div>
+      <div class="st"><div class="layer">Deploy</div><div class="tool">Vercel</div><div class="why">Public: amazon-rating-recommender.vercel.app</div></div>
+    </div>
+    <div class="cloudmap">
+      <div class="ct">Where it lands on a cloud stack</div>
+      <div class="csub">The same pipeline, mapped to the cloud tools in the Siemens JD. Honest “this is where it plugs in”, not “I ran it in production”.</div>
+      <div class="crow"><div class="cin"><b>CSV</b> ratings</div><div class="cto">→ <b>Parquet</b> lake — columnar cloud storage</div></div>
+      <div class="crow"><div class="cin"><b>pandas</b> aggregation</div><div class="cto">→ <b>Snowflake</b> — cloud SQL warehouse</div></div>
+      <div class="crow"><div class="cin"><b>TF-IDF</b> over item text</div><div class="cto">→ <b>NLP on unstructured data</b> — the JD's text / machine-log NLP ask</div></div>
+      <div class="crow"><div class="cin">User-interaction event logs</div><div class="cto">→ <b>Azure Data Explorer (KQL)</b> — cloud log-analytics</div></div>
     </div>
   </section>
 

@@ -231,8 +231,16 @@ cd web && npm install && npm run dev
   coordinator's account `shamanths-projects`. ⚠️ Old preview `web-mu-steel-25` now superseded.
 - ✅ **Interview study material:** `presentation/interview-walkthrough.html` — mirrors the
   MarketLens walkthrough (purpose → plain 5-step story → data snapshot → spoken answers → glossary
-  → 6 beats → click path → 12-Q&A → **JD-mapping table** → Siemens bridge → cold-start one-pager),
-  in Deekshita's plain-English voice.
+  → 6 beats → click path → Q&A → **JD-mapping table** → **"How far I pushed it" leaderboard** →
+  Siemens bridge → cold-start one-pager), in Deekshita's plain-English voice. Includes "explain
+  further" toggles (honest-testing breakdown, **data-drift vs concept-drift**).
+- ✅ **Stage 1 experiment — stacked ensemble (`ml/stack.py`):** an honest "how far can I push it"
+  study. Same 50k by-interaction holdout. Leaderboard: **STACKED (meta-LGBM) 0.767** > SVD 0.798 >
+  SVD-wide 0.806 > shipped hybrid 0.811 > KNNBaseline 0.835 > avg-of-bases 0.870 > NMF 1.050 >
+  baseline 1.073 > LightGBM 1.580. SVD++ dropped (unusably slow for negligible gain).
+  **Decision (locked): SHIP the explainable hybrid (0.81); the 0.767 ensemble is a documented
+  experiment, NOT deployed** — the app/monitoring cockpit stay at the honest 0.81. Stage 2
+  (transformer embeddings) deferred to the NLP-classification project.
 - ▶️ **Next: Phase 4** — (a) for a fully-live public console: numpy-only model export as a Vercel
   Python function OR a small container (Render/Railway); (b) refresh README + `case-study` skill;
   (c) move to **`dsridhar2110`** — push to her GitHub, redeploy under her Vercel, rename project `recopulse`.

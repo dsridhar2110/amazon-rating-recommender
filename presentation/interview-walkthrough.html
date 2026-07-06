@@ -761,6 +761,50 @@
     </div>
   </section>
 
+  <!-- ROADMAP -->
+  <section>
+    <h2>If I had more time</h2>
+    <div class="h2sub">My roadmap — honest next steps, weakest part first</div>
+    <p class="lead-note">The live model is the explainable hybrid at <b>0.81</b>. Here's exactly what I'd improve next
+      — this is my answer to "what would you do with more time?". I start with the weakest part: cold-start, the
+      ~<b>14%</b> of predictions for products with no rating history.</p>
+
+    <div class="card">
+      <p style="font-size:15px;color:#1e293b;margin-bottom:4px"><b>Making cold-start better</b> — today it's a simple
+        <span class="term" style="color:var(--teal-dark);font-weight:600">TF-IDF</span> match on the product name, which
+        only spots <em>shared words</em>. Better, strongest first:</p>
+    </div>
+    <div class="card gloss" style="margin-top:12px">
+      <div class="gitem"><div class="g-term">1 · Semantic embeddings instead of TF-IDF <span class="chip">biggest win</span></div>
+        <div class="g-def">A transformer (Sentence-BERT) understands <b>meaning</b>, so "Space Western" and "Sci-fi
+          Cowboy Epic" match even with <b>zero shared words</b> — which TF-IDF can't do. Directly targets the weakest
+          tier. <em>(This is the transformer work I'm saving for my NLP-classification project.)</em></div></div>
+      <div class="gitem"><div class="g-term">2 · Use more than the name</div>
+        <div class="g-def">Genre, category, description, cast, price. Cold-start <b>is</b> content-based filtering — the
+          richer the content, the better the guess. Right now I only have the title, so I'm fighting one-handed.</div></div>
+      <div class="gitem"><div class="g-term">3 · Predict the "taste fingerprint" from the text</div>
+        <div class="g-def">Train a small model that maps an item's <b>name → the hidden taste vector</b> SVD would have
+          learned, so a brand-new item gets an <b>estimated collaborative profile</b> instead of only borrowed averages.</div></div>
+      <div class="gitem"><div class="g-term">4 · Personalise the borrow</div>
+        <div class="g-def">Instead of borrowing similar items' <em>average</em>, learn what content <b>this shopper</b>
+          likes from their history (e.g. they love sci-fi) and score the new item against <b>their</b> taste, not the
+          crowd's.</div></div>
+      <div class="gitem"><div class="g-term">5 · Smarter fallback + robustness</div>
+        <div class="g-def">Shrink toward the item's <b>category</b> average rather than the global one, and use
+          <b>character-level</b> matching so typos and title variants still find their match.</div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-soft);border-color:#99f6e4">
+      <p style="font-size:15px;color:#1e293b"><b>The accuracy ceiling — already tested.</b> I built a stacked ensemble
+        that reached <b>0.767</b> (~5% better — see "How far I pushed it"). It's <b>tested and promising</b>, but it's a
+        black box, so I keep the explainable <b>0.81</b> live and hold the ensemble as a <b>proven next step</b> if
+        accuracy ever became the priority.</p>
+      <p style="font-size:13.5px;color:var(--muted);margin-top:10px"><b>The line I'd say:</b> "The live model is
+        explainable at 0.81. My roadmap, in order: semantic embeddings for cold-start, richer item features, then the
+        stacked ensemble I've already validated at 0.767."</p>
+    </div>
+  </section>
+
   <!-- JD MAP -->
   <section>
     <h2>Against the job description</h2>
